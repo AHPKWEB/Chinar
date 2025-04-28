@@ -1,7 +1,7 @@
 const CACHE_NAME = 'MAWAHOTEL-cache-v1';
 const urlsToCache = [
   '/',
-  '/p/invoice.html',
+  'https://chinarresorts.blogspot.com',
   '/p/mawahotelinvoice.html',
   '/images/logo.png'
 ];
@@ -26,7 +26,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request).catch(() => {
-      return caches.match(event.request).then(response => response || caches.match('/p/mawahotelinvoice.html'));
+      return caches.match(event.request).then(response => response || caches.match('https://chinarresorts.blogspot.com/p/mawahotelinvoice.html'));
     })
   );
 });
