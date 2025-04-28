@@ -1,0 +1,22 @@
+{
+    "name":"MAWA HOTEL",
+    "short_name":"MAWAHOTEL",
+    "start_url":"https://chinarresorts.blogspot.com",
+    "display":"standalone",
+    "background_color":"#ffffff",
+    "theme_color":"#ffffff",
+    "scope": ".",
+    "description":"MAWA  HOTEL & RESTAURANT.",
+    "icons":[
+    {
+    "src":"images/android-192x192",                     
+    "sizes":"192x192",
+    "type":"image/png"
+    },
+    {
+    "src":"images/android-512x512.png",
+    "sizes":"512x512",
+    "type":"image/png"
+    }
+  ]
+}
