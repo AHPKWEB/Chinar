@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chinar Resorts Invoice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 1rem;
+      max-width: 800px;
+      margin: auto;
+      line-height: 1.6;
+      background-color: #f7f7f7;
+    }
+    h1 {
+      color: #990000;
+    }
+    h2 {
+      color: #003366;
+      border-bottom: 2px solid #003366;
+      padding-bottom: 0.5rem;
+    }
+    ul {
+      list-style: disc;
+      padding-left: 1.5rem;
+    }
+    .section {
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chinar Resorts</h1>
+  <h2>General Terms and Conditions</h2>
+
+  <div class="section">
+    <p>This quotation is valid for the next 24 hours.</p>
+    <p>We charge PKR 1500/- per day additional for heating in room.</p>
+    <p>
+      The Chinar Resorts management reserves the right to modify any or all listed rates at its sole discretion, at any time and without assigning any reason. Bookings against which advance payment has been received shall, however, be honored and those shall not be affected by any such rate adjustments.
+    </p>
+  </div>
+
+  <div class="section">
+    <h3>Number of beds in room types:</h3>
+    <ul>
+      <li>Standard Room: 2 single beds or 1 double bed</li>
+      <li>Deluxe Room: 2 single beds or 1 double bed</li>
+      <li>Deluxe-Plus Room: 1 double bed & 1 single bed</li>
+      <li>Executive Room: 1 double bed</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Extra mattress policy (PKR 1000/- per mattress):</h3>
+    <ul>
+      <li>Standard Room: 1 complimentary mattress</li>
+      <li>Deluxe Room: 1 complimentary mattress</li>
+      <li>Triple-Deluxe Room: 1 charged mattress</li>
+      <li>Executive Room: 2 mattresses (1 complimentary + 1 charged)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Maximum person sharing per room:</h3>
+    <ul>
+      <li>Deluxe-Plus Room: 4 persons</li>
+      <li>Executive Room: 4 persons</li>
+      <li>Deluxe Room: 3 persons</li>
+      <li>Standard Room: 3 persons</li>
+    </ul>
+    <p>Guests aged 12 and above are considered adults.</p>
+  </div>
+
+  <div class="section">
+    <p>
+      Corporate/Group event package rates are available from the Chinar Resorts Head Office in Islamabad or through social media. Each package is based on specific client requirements.
+    </p>
+    <p>Car parking at Paras Bazar: PKR 200/- per night per vehicle.</p>
+    <p>
+      Chinar Resorts may remain closed between December and March. Please confirm availability in advance with the Chinar Resorts Office in Islamabad.
+    </p>
+    <p>Rights of admission are reserved.</p>
+    <p>
+      Food services are available from 7:00 am to midnight. Attached kitchens are not provided and cooking is not allowed.
+    </p>
+    <p>Room Service is available from 7:00 am to midnight.</p>
+  </div>
+
+  <div class="section">
+    <h2>Booking Cancellation / Amendment Policy</h2>
+    <ol>
+      <li>Confirmed bookings cannot be cancelled under any circumstances.</li>
+      <li>
+        Booking dates may be changed subject to:
+        <ul>
+          <li>During peak season, request must be made at least 7 days before 12:00 noon of the original check-in date.</li>
+          <li>Requests made without sufficient notice will not be entertained.</li>
+          <li>
+            If sufficient notice is provided, changes will be allowed based on availability. If unavailable:
+            <ul>
+              <li>Move booking to next available date</li>
+              <li>Retain the original booking</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        Guests violating these policies will forfeit their advance payment and receive no refunds.
+      </li>
+      <li>
+        Chinar Resorts may revise these policies at any time at its sole discretion.
+      </li>
+    </ol>
+  </div>
+</body>
+</html>
