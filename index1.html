@@ -1,44 +1,117 @@
-<!--DOCTYPE html-->
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Digital Khata</title>
 <style>
-.responsive-iframe {
-  width: 100%;
-  height: calc(100vh - 60px); /* Adjust if you have a header */
-  border: none;
-}
-.item-post h1.post-title{
-    color: #161619;
-    font-size: 31px;
-    line-height: 1.4em;
-    font-weight: 700;
-    position: relative;
-    display: block;
-    margin: 10px 0 30px;
-    DISPLAY: none;
-}
-#main-wrapper {
-    float: left;
-    overflow: hidden;
-    width: 100%;
-    box-sizing: border-box;
-    word-wrap: break-word;
-    margin: -20px 0 0;
-}
-@media screen and (max-width: 1120px) {
-    .header-header, .header-intro, #content-wrapper, .footer-section .widget {
-        box-sizing: border-box;
-        padding: 0 2px;
-    }
-}
+body{font-family:Arial}
+input,select,button{margin:4px}
 </style>
 </head>
 <body>
 
-<div class="container"> 
-  <iframe class="responsive-iframe" src="https://script.google.com/macros/s/AKfycbxDxzsKtgce724TU6ptA115Gim0v9c3a7jX0u7vL7O2T1A3_Is4Y8CeIHgIGxEm5pLR/exec"></iframe>
+<h2>📘 Digital Khata</h2>
+
+<div id="login">
+  <input id="pin" placeholder="PIN">
+  <button onclick="login()">Login</button>
 </div>
+
+<div id="app" style="display:none">
+
+<select id="lang" onchange="setLang(this.value)">
+  <option value="en">English</option>
+  <option value="ur">Urdu</option>
+  <option value="ar">Arabic</option>
+</select>
+
+<hr>
+
+<input id="customer" placeholder="Customer">
+<select id="type">
+  <option value="udhar">Udhar</option>
+  <option value="jama">Jama</option>
+</select>
+<input id="amount" placeholder="Amount">
+<input id="note" placeholder="Note">
+<button onclick="add()">Save</button>
+
+<hr>
+
+<button onclick="ledger()">Customer Ledger</button>
+<button onclick="pdf()">PDF</button>
+
+<br>
+<input type="date" id="from">
+<input type="date" id="to">
+<button onclick="filter()">Filter</button>
+
+<pre id="out"></pre>
+
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbzGzC9tx7UIYf8RJIiglo_wlYa8r4ys9cnCjJKUFuveiVzRQGVKy5iFjcKSzF8x1Xn3/exec";
+
+const T = {
+ en:{save:"Save"},
+ ur:{save:"محفوظ کریں"},
+ ar:{save:"حفظ"}
+};
+
+function setLang(l){
+ document.querySelector("button").innerText=T[l].save;
+}
+
+function login(){
+ localStorage.pin=pin.value;
+ login.style.display="none";
+ app.style.display="block";
+}
+
+function add(){
+ fetch(API+"?"+qs({
+  action:"add",
+  pin:localStorage.pin,
+  customer:customer.value,
+  type:type.value,
+  amount:amount.value,
+  note:note.value
+ }))
+ .then(r=>r.json()).then(()=>alert("Saved"));
+}
+
+function ledger(){
+ fetch(API+"?"+qs({
+  action:"ledger",
+  pin:localStorage.pin,
+  customer:customer.value
+ }))
+ .then(r=>r.json()).then(d=>out.textContent=JSON.stringify(d,null,2));
+}
+
+function filter(){
+ fetch(API+"?"+qs({
+  action:"filter",
+  pin:localStorage.pin,
+  from:from.value,
+  to:to.value
+ }))
+ .then(r=>r.json()).then(d=>out.textContent=JSON.stringify(d,null,2));
+}
+
+function pdf(){
+ fetch(API+"?"+qs({
+  action:"pdf",
+  pin:localStorage.pin,
+  customer:customer.value
+ }))
+ .then(r=>r.json())
+ .then(d=>window.open("https://wa.me/?text="+encodeURIComponent(d.url)));
+}
+
+function qs(o){ return new URLSearchParams(o).toString(); }
+</script>
 
 </body>
 </html>
