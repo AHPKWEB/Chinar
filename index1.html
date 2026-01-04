@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Digital Khata</title>
@@ -19,27 +19,22 @@ input,select,button{margin:4px}
 
 <div id="app" style="display:none">
 
-<select id="lang" onchange="setLang(this.value)">
-  <option value="en">English</option>
-  <option value="ur">Urdu</option>
-  <option value="ar">Arabic</option>
-</select>
-
-<hr>
-
-<input id="customer" placeholder="Customer">
+<input id="customer" placeholder="Customer Name">
 <select id="type">
   <option value="udhar">Udhar</option>
   <option value="jama">Jama</option>
 </select>
 <input id="amount" placeholder="Amount">
 <input id="note" placeholder="Note">
+
 <button onclick="add()">Save</button>
+<button onclick="update()">Update</button>
 
 <hr>
 
-<button onclick="ledger()">Customer Ledger</button>
-<button onclick="pdf()">PDF</button>
+<button onclick="ledger()">Ledger</button>
+<button onclick="balance()">Balance</button>
+<button onclick="pdf()">PDF / WhatsApp</button>
 
 <br>
 <input type="date" id="from">
@@ -52,42 +47,55 @@ input,select,button{margin:4px}
 
 <script>
 const API = "https://script.google.com/macros/s/AKfycbzGzC9tx7UIYf8RJIiglo_wlYa8r4ys9cnCjJKUFuveiVzRQGVKy5iFjcKSzF8x1Xn3/exec";
-
-const T = {
- en:{save:"Save"},
- ur:{save:"محفوظ کریں"},
- ar:{save:"حفظ"}
-};
-
-function setLang(l){
- document.querySelector("button").innerText=T[l].save;
-}
+let editRow = null;
 
 function login(){
- localStorage.pin=pin.value;
- login.style.display="none";
- app.style.display="block";
+  localStorage.pin = pin.value;
+  login.style.display="none";
+  app.style.display="block";
 }
 
 function add(){
- fetch(API+"?"+qs({
-  action:"add",
-  pin:localStorage.pin,
-  customer:customer.value,
-  type:type.value,
-  amount:amount.value,
-  note:note.value
- }))
- .then(r=>r.json()).then(()=>alert("Saved"));
+  send("add");
+}
+
+function update(){
+  if(!editRow) return alert("Select record first");
+  send("update",{row:editRow});
+  editRow=null;
 }
 
 function ledger(){
+  fetch(API+"?"+qs({
+    action:"ledger",
+    pin:localStorage.pin,
+    customer:customer.value
+  }))
+  .then(r=>r.json())
+  .then(d=>{
+    out.textContent="";
+    d.forEach(x=>{
+      out.textContent +=
+       `Row:${x.row} ${x.r[1]} ${x.r[3]}\n`;
+      editRow = x.row;
+    });
+  });
+}
+
+function balance(){
  fetch(API+"?"+qs({
-  action:"ledger",
+  action:"balance",
   pin:localStorage.pin,
   customer:customer.value
  }))
- .then(r=>r.json()).then(d=>out.textContent=JSON.stringify(d,null,2));
+ .then(r=>r.json())
+ .then(d=>{
+  out.textContent =
+   `Opening: ${d.opening}
+Udhar: ${d.udhar}
+Jama: ${d.jama}
+Balance: ${d.balance}`;
+ });
 }
 
 function filter(){
@@ -97,7 +105,8 @@ function filter(){
   from:from.value,
   to:to.value
  }))
- .then(r=>r.json()).then(d=>out.textContent=JSON.stringify(d,null,2));
+ .then(r=>r.json())
+ .then(d=>out.textContent=JSON.stringify(d,null,2));
 }
 
 function pdf(){
@@ -107,10 +116,27 @@ function pdf(){
   customer:customer.value
  }))
  .then(r=>r.json())
- .then(d=>window.open("https://wa.me/?text="+encodeURIComponent(d.url)));
+ .then(d=>window.open(
+  "https://wa.me/?text="+encodeURIComponent(d.url)
+ ));
 }
 
-function qs(o){ return new URLSearchParams(o).toString(); }
+function send(action, extra={}){
+ fetch(API+"?"+qs(Object.assign({
+  action,
+  pin:localStorage.pin,
+  customer:customer.value,
+  type:type.value,
+  amount:amount.value,
+  note:note.value
+ },extra)))
+ .then(r=>r.json())
+ .then(()=>alert("Done"));
+}
+
+function qs(o){
+ return new URLSearchParams(o).toString();
+}
 </script>
 
 </body>
