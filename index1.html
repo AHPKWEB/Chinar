@@ -1,224 +1,75 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Borrowed Loan Manager</title>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-
 <style>
-  :root{ --bg:#f6f8fb; --card:#fff; --accent:#0073e6; --muted:#6b6b6b; }
-  [data-theme='dark']{ --bg:#0f1720; --card:#0b1220; --accent:#3aa0ff; --muted:#9aa5b1; color:#e6f0fb }
-  html,body{ height:100%; margin:0; background:var(--bg); font-family:Inter, Roboto, Arial, sans-serif; }
-  header{ position:sticky; top:0; z-index:20; }
-  .app-container{ padding-bottom:120px; }
-  .card{ background:var(--card); padding:12px; margin:10px; border-radius:12px; box-shadow:0 4px 18px rgba(10,10,10,0.06); }
-  .bottom-nav{ position:fixed; bottom:0; left:0; right:0; z-index:30; }
-  .fab{ position:fixed; right:16px; bottom:90px; z-index:40; width:58px; height:58px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(0,0,0,0.2);} 
-  .panel{ position:fixed; left:0; right:0; bottom:0; height:0; overflow:auto; background:var(--card); border-top-left-radius:12px; border-top-right-radius:12px; box-shadow:0 -10px 30px rgba(0,0,0,0.12); transition:height .28s ease; z-index:45 }
-  .panel.open{ height:74vh }
-  .searchbar{ display:flex; gap:8px; align-items:center; }
-  .searchbar input{ flex:1 }
-  .holder-row{ display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(0,0,0,0.04) }
-  .holder-meta{ display:flex; gap:10px; align-items:center }
-  .holder-id{ font-weight:700; font-size:13px }
-  .muted{ color:var(--muted); font-size:13px }
-  .tiny{ font-size:12px }
-  .w3-modal-content{ border-radius:12px; }
-  @media (min-width:720px){ .panel.open{ height:60vh } }
+body{font-family:Arial,sans-serif;margin:0;padding:0;background:#f6f8fb;}
+.card{margin:10px;padding:12px;background:#fff;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,0.06);}
+.holder-row{display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eee;cursor:pointer;}
+.holder-meta{display:flex;gap:10px;}
+.holder-id{font-weight:700;}
+.muted{color:#777;font-size:12px;}
 </style>
 </head>
 <body>
 
-<header class="w3-bar w3-card w3-padding-small" style="background:var(--card);">
-  <div style="display:flex; align-items:center; justify-content:space-between; width:100%">
-    <div style="display:flex; gap:10px; align-items:center">
-      <img src="https://www.gstatic.com/images/branding/product/1x/sheets_48dp.png" style="width:36px; height:36px; border-radius:8px;" alt="logo">
-      <div>
-        <div style="font-weight:700">Borrowed Loan Manager</div>
-        <div class="muted tiny">Mobile staff app</div>
-      </div>
-    </div>
-    <div style="display:flex; gap:8px; align-items:center">
-      <button class="w3-button w3-round-small" id="themeToggle" title="Toggle dark mode">🌙</button>
-      <button class="w3-button w3-round-small" id="loginBtn">Login</button>
-    </div>
-  </div>
-</header>
-
-<div class="app-container">
-  <div class="card" id="kpis">
-    <div id="toast" class="w3-panel w3-green w3-display-bottomright w3-round-large w3-opacity" 
-         style="display:none; min-width:250px; padding:10px; z-index:9999; position:absolute;top: 20px;height: 100px;">
-      <span id="toast-message"></span>
-      <a id="toast-wa-link" href="#" target="_blank" style="margin-left:10px; color:#fff; font-weight:bold; display:none;">WhatsApp</a>
-    </div>
-    <div style="display:flex; justify-content:space-between; align-items:center">
-      <div>
-        <div style="font-size:12px; color:var(--muted)">Total Holders</div>
-        <div id="totalHolders" style="font-size:20px; font-weight:700">—</div>
-      </div>
-      <div>
-        <div style="font-size:12px; color:var(--muted)">Total Balance</div>
-        <div id="totalBalance" style="font-size:20px; font-weight:700">—</div>
-      </div>
-      <div>
-        <div style="font-size:12px; color:var(--muted)">Collected Today</div>
-        <div id="collectedToday" style="font-size:20px; font-weight:700">—</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="searchbar">
-      <input id="q" class="w3-input w3-border" placeholder="Search by name, holder ID, phone..." oninput="renderList()">
-    </div>
-    <div class="searchbar">
-      <select id="filterStatus" class="w3-select w3-border" onchange="renderList()">
-        <option value="">All status</option>
-        <option value="Active">Active</option>
-        <option value="Closed">Closed</option>
-        <option value="To give">To give</option>
-        <option value="To take">To take</option>
-      </select>
-      <button class="w3-button w3-light-grey" id="refreshBtn">Refresh</button>
-    </div>
-    <div style="margin-top:8px" class="muted tiny">Tap a holder to open quick actions (deposit / withdraw / edit)</div>
-  </div>
-
-  <div class="card" id="holdersCard">
-    <div id="holdersList">Loading holders…</div>
-  </div>
+<div class="card">
+  <h3>Total Holders: <span id="totalHolders">0</span></h3>
+  <h3>Total Balance: <span id="totalBalance">0</span></h3>
 </div>
 
-<button class="w3-circle w3-blue fab" id="fab">+</button>
-<div id="panel" class="panel" aria-hidden="true"></div>
-
-<div id="confirmModal" class="w3-modal">
-  <div class="w3-modal-content w3-animate-bottom w3-card-4" style="padding:14px;">
-    <h4>Confirm</h4>
-    <p id="confirmMsg">Are you sure?</p>
-    <p>
-      <button class="w3-button w3-red" id="confirmYes">Yes</button>
-      <button class="w3-button w3-light-grey" onclick="document.getElementById('confirmModal').style.display='none'">Cancel</button>
-    </p>
-  </div>
+<div class="card">
+  <input type="text" id="q" placeholder="Search..." oninput="renderList()" style="width:100%;padding:8px;margin-bottom:8px;">
 </div>
 
-<div id="loginModal" class="w3-modal">
-  <div class="w3-modal-content w3-card-4 w3-animate-top" style="padding:16px;">
-    <h4>Staff Login / PIN</h4>
-    <p class="muted tiny">Local PIN; for production use Apps Script authentication.</p>
-    <input id="pinInput" class="w3-input w3-border w3-margin-bottom" placeholder="Enter 4-digit PIN" maxlength="6" type="password">
-    <div style="display:flex; gap:8px">
-      <button class="w3-button w3-blue" onclick="doLogin()">Unlock</button>
-      <button class="w3-button w3-light-grey" onclick="setPin()">Set PIN</button>
-      <button class="w3-button w3-red" onclick="logout()">Logout</button>
-    </div>
-  </div>
-</div>
+<div class="card" id="holdersList">Loading...</div>
 
 <script>
-// -------------------------
-// CONFIG: Your Apps Script Web App URL
-// -------------------------
 const API_URL = "https://script.google.com/macros/s/AKfycbypxIF7Gb0_DSmwFoZKD7oEAkRniUHJ2T8Ojmk3RJ9AE4LdKvnqkpTP0g5gybaqPXmJ/exec";
+let holders=[];
 
-// -------------------------
-// State
-// -------------------------
-let holders = [];
-let isAuthenticated = false;
-let queuedActions = JSON.parse(localStorage.getItem('ql') || '[]');
-
-// -------------------------
-// Call server
-// -------------------------
-async function callServer(fnName, data){
-  data = data || {};
-  data.action = fnName;
-  const params = new URLSearchParams(data);
-  try {
-    const res = await fetch(`${API_URL}?${params.toString()}`);
-    return res.json();
-  } catch(err){
-    console.error(err);
-    return { status: 'Server error: ' + err.message };
+async function loadHolders(){
+  try{
+    const resp=await fetch(`${API_URL}?action=getHolders`);
+    const data=await resp.json();
+    holders=data;
+    computeKPIs();
+    renderList();
+  }catch(e){
+    console.error(e);
+    document.getElementById('holdersList').innerHTML='<div class="muted">Failed to load holders</div>';
   }
 }
 
-// -------------------------
-// Theme
-// -------------------------
-const themeToggle = document.getElementById('themeToggle');
-function applyTheme(t){
-  if(t==='dark'){ document.documentElement.setAttribute('data-theme','dark'); themeToggle.innerText='☀️'; }
-  else{ document.documentElement.removeAttribute('data-theme'); themeToggle.innerText='🌙'; }
-  localStorage.setItem('pref-theme', t);
+function computeKPIs(){
+  const total=holders.length;
+  const sum=holders.reduce((s,h)=>s+Number(h.balance||0),0);
+  document.getElementById('totalHolders').innerText=total;
+  document.getElementById('totalBalance').innerText=sum.toFixed(2);
 }
-themeToggle.onclick = ()=> applyTheme(localStorage.getItem('pref-theme')==='dark' ? 'light' : 'dark');
-applyTheme(localStorage.getItem('pref-theme')||'light');
 
-// -------------------------
-// Login
-// -------------------------
-document.getElementById('loginBtn').onclick = ()=> { document.getElementById('loginModal').style.display='block'; }
-function setPin(){ const pin=document.getElementById('pinInput').value.trim(); if(!/^[0-9]{4,6}$/.test(pin)){ alert('Enter 4-6 digits PIN'); return; } localStorage.setItem('staffPIN', pin); alert('PIN set'); }
-function doLogin(){ const pin=document.getElementById('pinInput').value.trim(); const stored=localStorage.getItem('staffPIN'); if(stored && pin===stored){ isAuthenticated=true; document.getElementById('loginModal').style.display='none'; alert('Unlocked'); } else alert('Wrong PIN'); }
-function logout(){ localStorage.removeItem('staffPIN'); isAuthenticated=false; alert('Logged out'); }
-
-// -------------------------
-// Load holders
-// -------------------------
-async function loadTable(){
-  const resp = await callServer('getHoldersJson');
-  if(Array.isArray(resp)){ holders = resp; computeKPIs(); renderList(); }
-  else { document.getElementById('holdersList').innerHTML = '<div class="muted">Failed to load holders</div>'; }
-}
-document.getElementById('refreshBtn').onclick = ()=> loadTable();
-document.getElementById('fab').onclick = ()=> openAddHolder();
-loadTable();
-
-// -------------------------
-// Render List
-// -------------------------
 function renderList(){
-  const q = document.getElementById('q').value.trim().toLowerCase();
-  const status = document.getElementById('filterStatus').value;
-  const container = document.getElementById('holdersList');
-  if(!holders || holders.length===0){ container.innerHTML='<div class="muted">No holders</div>'; return; }
-
-  const rows = holders.filter(h=>{
-    if(status && (!h.status || !h.status.includes(status))) return false;
-    if(!q) return true;
-    return (h.name||'').toLowerCase().includes(q) || (h.hid||'').toLowerCase().includes(q) || (h.phone||'').toLowerCase().includes(q);
-  }).map(h=>`
-    <div class="holder-row" onclick='openHolderActions(${JSON.stringify(JSON.stringify(h))})'>
-      <div class="holder-meta">
-        <div style="width:48px;height:48px;border-radius:8px;background:linear-gradient(45deg,var(--accent),#2ed0ff);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700">
-          ${(h.name||'')[0]||'H'}
-        </div>
-        <div>
-          <div class="holder-id">${h.name||'—'} <span class="muted">${h.hid||''}</span></div>
-          <div class="muted tiny">${h.phone||''} • Balance: ${formatCurrency(h.balance||0)}</div>
-        </div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-weight:700">${formatCurrency(h.balance||0)}</div>
-        <div class="muted tiny">${h.status||''}</div>
-      </div>
-    </div>`).join('');
-
-  container.innerHTML = rows || '<div class="muted">No holders match filter</div>';
+  const q=document.getElementById('q').value.toLowerCase();
+  const filtered=holders.filter(h=>h.name.toLowerCase().includes(q)||h.hid.toLowerCase().includes(q));
+  if(!filtered.length){
+    document.getElementById('holdersList').innerHTML='<div class="muted">No holders found</div>';
+    return;
+  }
+  const html=filtered.map(h=>`
+    <div class="holder-row" onclick="alert('Holder: ${h.name} | Balance: ${h.balance}')">
+      <div class="holder-meta"><div class="holder-id">${h.name}</div><div class="muted">${h.hid}</div></div>
+      <div>${h.balance}</div>
+    </div>
+  `).join("");
+  document.getElementById('holdersList').innerHTML=html;
 }
 
-// -------------------------
-// Utilities
-// -------------------------
-function formatCurrency(v){ try{ return Number(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }catch(e){ return v; } }
-function computeKPIs(){ document.getElementById('totalHolders').innerText=holders.length; document.getElementById('totalBalance').innerText=formatCurrency(holders.reduce((s,h)=>s+(h.balance||0),0)); document.getElementById('collectedToday').innerText='—'; }
-function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c])); }
-
+// Initialize
+loadHolders();
 </script>
+
 </body>
 </html>
